@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌿 LeviLaunchroid
+# 🌿 MemeLauncher
 
 **A Modern, Lightweight Minecraft: Bedrock Edition Launcher for Android**
 
@@ -14,9 +14,20 @@
 
 ## 🚀 Introduction
 
-**LeviLaunchroid** (formerly MemeLauncher) is a lightweight and powerful Android launcher designed for **Minecraft: Bedrock Edition**. It empowers players with advanced version management, native mod support, and seamless content integration, all within a clean and modern user interface.
+**MemeLauncher** is a lightweight and powerful Android launcher designed for **Minecraft: Bedrock Edition**. It empowers players with advanced version management, native mod support, and seamless content integration, all within a clean and modern user interface.
 
-Whether you want to run multiple versions of the game side-by-side, experiment with native SO modules, or easily manage your worlds and packs, LeviLaunchroid provides the ultimate toolkit for the mobile Bedrock community.
+Whether you want to run multiple versions of the game side-by-side, experiment with native SO modules, or easily manage your worlds and packs, MemeLauncher provides the ultimate toolkit for the mobile Bedrock community.
+
+---
+
+## 📦 Download & Release
+
+You can download the latest builds of MemeLauncher directly from our GitHub Releases page:
+
+**[🚀 Download Latest APK](https://github.com/BiniFn/MemeLauncher/releases)**
+
+The build artifacts include:
+- **`MemeLauncher-debug.apk`**: The main debug build with all the latest fixes and features.
 
 ---
 
@@ -54,7 +65,7 @@ Whether you want to run multiple versions of the game side-by-side, experiment w
 
 ## 🛠️ Build from Source
 
-If you wish to build LeviLaunchroid yourself:
+If you wish to build MemeLauncher yourself:
 
 1. Clone the repository: `git clone https://github.com/BiniFn/MemeLauncher.git`
 2. Open the project in **Android Studio (Ladybug or newer)**.
@@ -77,6 +88,6 @@ Developed with ❤️ by **BiniFn**.
 
 ## ⚠️ Disclaimer
 
-LeviLaunchroid is an **unofficial** launcher for Minecraft: Bedrock Edition. It is not affiliated with Mojang Studios or Microsoft. Use of mods and external modules is at your own risk.
+MemeLauncher is an **unofficial** launcher for Minecraft: Bedrock Edition. It is not affiliated with Mojang Studios or Microsoft. Use of mods and external modules is at your own risk.
 
 **[Taplink](https://taplink.cc/binifn) | [Guns.gg](https://guns.lol/binifn)**
