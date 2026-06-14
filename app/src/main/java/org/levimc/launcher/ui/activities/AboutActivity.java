@@ -5,11 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
 
 import org.levimc.launcher.R;
 import org.levimc.launcher.ui.animation.DynamicAnim;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,14 +24,14 @@ import okhttp3.Response;
 
 public class AboutActivity extends BaseActivity {
 
-    private static final String AVATAR_URL = "https://avatars.githubusercontent.com/u/62042544?v=4";
-    private static final String URL_AFDIAN = "https://afdian.com/a/DreamGuXiang";
-    private static final String URL_PATREON = "https://www.patreon.com/c/DreamGuXiang";
-    private static final String URL_REPO = "https://github.com/LiteLDev/LeviLaunchroid";
-    private static final String URL_ORG = "https://github.com/LiteLDev";
-    private static final String URL_ISSUES = "https://github.com/LiteLDev/LeviLaunchroid/issues";
-    private static final String MAINTAINER_AVATAR_URL = "https://yt3.googleusercontent.com/ft4khqXZ_fQn-DbSLg91kQy3_JUQ_73rbg18nOcmMtunX5bq25jzrThWQAk9YsFkTKFesUL7sg8=s160-c-k-c0x00ffffff-no-rj";
-    private static final String URL_YOUTUBE = "https://www.youtube.com/c/mrpokeg";
+    private static final String AVATAR_URL = "https://github.com/BiniFn.png";
+    private static final String URL_TAPLINK = "https://taplink.cc/binifn";
+    private static final String URL_GUNS = "https://guns.lol/binifn";
+    private static final String URL_GITHUB = "https://github.com/BiniFn";
+    private static final String URL_PATREON = "https://patreon.com/BiniFn";
+    private static final String URL_YT_MAIN = "https://youtube.com/@BiniFn_Yt";
+    private static final String URL_YT_RBX = "https://youtube.com/@BiniRBX";
+    private static final String URL_YT_FX = "https://youtube.com/@BiniFx";
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final OkHttpClient client = new OkHttpClient();
@@ -46,7 +51,6 @@ public class AboutActivity extends BaseActivity {
 
     private void styleBadges() {
         TextView authorBadge = findViewById(R.id.author_badge);
-        TextView maintainerBadge = findViewById(R.id.maintainer_badge);
 
         org.levimc.launcher.util.PersonalizationManager pm = new org.levimc.launcher.util.PersonalizationManager(this);
         int accent = pm.getAccentColor();
@@ -59,10 +63,6 @@ public class AboutActivity extends BaseActivity {
                 authorBadge.setBackground(gd);
                 authorBadge.setTextColor(android.graphics.Color.WHITE);
             }
-            if (maintainerBadge != null) {
-                maintainerBadge.setBackground(gd);
-                maintainerBadge.setTextColor(android.graphics.Color.WHITE);
-            }
         }
     }
 
@@ -73,7 +73,6 @@ public class AboutActivity extends BaseActivity {
 
     private void loadAvatars() {
         com.microsoft.xbox.idp.toolkit.CircleImageView avatar = findViewById(R.id.author_avatar);
-        com.microsoft.xbox.idp.toolkit.CircleImageView maintainerAvatar = findViewById(R.id.maintainer_avatar);
 
         executor.execute(() -> {
             try {
@@ -87,29 +86,23 @@ public class AboutActivity extends BaseActivity {
                     }
                 }
             } catch (Exception ignored) {}
-
-            try {
-                if (maintainerAvatar != null) {
-                    Response resp = client.newCall(new Request.Builder().url(MAINTAINER_AVATAR_URL).build()).execute();
-                    if (resp.isSuccessful() && resp.body() != null) {
-                        Bitmap bmp = BitmapFactory.decodeStream(resp.body().byteStream());
-                        runOnUiThread(() -> {
-                            if (bmp != null) maintainerAvatar.setImageBitmap(bmp);
-                        });
-                    }
-                }
-            } catch (Exception ignored) {}
         });
     }
 
     private void setupLinks() {
-        setupLinkButton(R.id.btn_afdian, URL_AFDIAN);
+        setupLinkButton(R.id.btn_taplink, URL_TAPLINK);
+        setupLinkButton(R.id.btn_guns, URL_GUNS);
+        setupLinkButton(R.id.btn_github_repo, URL_GITHUB);
         setupLinkButton(R.id.btn_patreon, URL_PATREON);
-        setupLinkButton(R.id.btn_github_repo, URL_REPO);
-        setupLinkButton(R.id.btn_github_org, URL_ORG);
-        setupLinkButton(R.id.btn_issues, URL_ISSUES);
-        setupLinkButton(R.id.btn_star_fork, URL_REPO);
-        setupLinkButton(R.id.btn_youtube_maintainer, URL_YOUTUBE);
+        setupLinkButton(R.id.btn_youtube_main, URL_YT_MAIN);
+        setupLinkButton(R.id.btn_youtube_rbx, URL_YT_RBX);
+        setupLinkButton(R.id.btn_youtube_fx, URL_YT_FX);
+        
+        View btnOpenStorage = findViewById(R.id.btn_open_storage);
+        if (btnOpenStorage != null) {
+            btnOpenStorage.setOnClickListener(v -> openDataFolder());
+            DynamicAnim.applyPressScale(btnOpenStorage);
+        }
     }
 
     private void setupLinkButton(int viewId, String url) {
@@ -121,5 +114,37 @@ public class AboutActivity extends BaseActivity {
             } catch (Exception ignored) {}
         });
         DynamicAnim.applyPressScale(btn);
+    }
+
+    private void openDataFolder() {
+        try {
+            File gamesDir = new File(android.os.Environment.getExternalStorageDirectory(), "games/com.mojang");
+            if (!gamesDir.exists()) gamesDir.mkdirs();
+            
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", gamesDir);
+            
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            // Use standard directory MIME type
+            intent.setDataAndType(uri, "vnd.android.document/directory");
+            
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                // Fallback for file managers that don't support the above
+                intent.setDataAndType(uri, "*/*");
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Intent fallback = new Intent(Intent.ACTION_GET_CONTENT);
+                    fallback.addCategory(Intent.CATEGORY_OPENABLE);
+                    fallback.setDataAndType(uri, "*/*");
+                    startActivity(Intent.createChooser(fallback, "Open Folder"));
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to open folder: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            android.util.Log.e("AboutActivity", "Folder open error", e);
+        }
     }
 }

@@ -1,6 +1,6 @@
 <resources>
     <!-- Common -->
-    <string name="app_name">LeviLauncher</string>
+    <string name="app_name">MemeLauncher</string>
     <string name="minecraft">Minecraft</string>
     <string name="launch">启动</string>
 
@@ -17,7 +17,7 @@
 
     <!-- About -->
     <string name="about_title">☕ 关于</string>
-    <string name="copyright">©2024–2026 LeviMC. 保留所有权利</string>
+    <string name="copyright">©2024–2026 BiniFn. 保留所有权利</string>
     <string name="font_license">本软件使用 Misans 字体</string>
     <string name="quick_actions_title">快捷操作</string>
     <string name="content_management_subtitle">管理世界、资源包和行为包</string>
@@ -138,8 +138,8 @@
     <string name="dialog_positive_ok">确定</string>
 
 
-    <string name="eula_title">LeviLauncher 用户协议</string>
-    <string name="eula_message"><b>欢迎使用 LeviLauncher</b>\n\n使用本软件即表示您同意：\n\n• 此为<b>非官方</b> Minecraft 启动器\n• 您需拥有<b>合法授权</b>的 Minecraft 副本\n• 禁止任何形式的盗版或作弊行为\n• 模组/资源包使用风险自负\n• 与 Mojang/Microsoft 无关联\n\n继续使用视为接受条款</string>
+    <string name="eula_title">BiniFn 用户协议</string>
+    <string name="eula_message"><b>欢迎使用 BiniFn</b>\n\n使用本软件即表示您同意：\n\n• 此为<b>非官方</b> Minecraft 启动器\n• 您需拥有<b>合法授权</b>的 Minecraft 副本\n• 禁止任何形式的盗版或作弊行为\n• 模组/资源包使用风险自负\n• 与 Mojang/Microsoft 无关联\n\n继续使用视为接受条款</string>
     <string name="eula_agree">接受</string>
     <string name="eula_exit">拒绝</string>
 
@@ -332,14 +332,14 @@
     <string name="ms_login_failed">Microsoft 登录失败</string>
     <string name="ms_login_failed_detail">登录失败：%1$s</string>
     <string name="xbox_avatar">Xbox头像</string>
-    <string name="launcher_managed_mc_login">使用 LeviLauncher 登录 Minecraft</string>
+    <string name="launcher_managed_mc_login">使用 BiniFn 登录 Minecraft</string>
     <string name="dialog_title_login_required">需要登录</string>
     <string name="dialog_message_login_required">已开启使用启动器登录，但当前未登录。请前往账号管理登录后再启动。</string>
     <string name="go_to_accounts">账号管理</string>
     <string name="disable_launcher_login_and_continue">关闭</string>
     <string name="sign_in">登录</string>
     <string name="ms_account_subtitle_format">用户ID：%1$s • 更新：%2$s</string>
-    <string name="about_footer_github">GitHub: https://github.com/LiteLDev/LeviLaunchroid</string>
+    <string name="about_footer_github">GitHub: https://taplink.cc/binifn</string>
 
     <string name="label_current_account">当前账号</string>
     <string name="label_other_accounts">其他账号</string>
@@ -598,24 +598,24 @@
     <string name="tag_custom">自定义</string>
     <string name="vanilla_prefix">原版 %s</string>
     <string name="about_page_title">关于</string>
-    <string name="about_subtitle">LeviLauncher — 现代 Minecraft 基岩版启动器</string>
+    <string name="about_subtitle">BiniFn — 现代 Minecraft 基岩版启动器</string>
     <string name="about_authors_title">👥 作者与维护者</string>
     <string name="about_author_name">DreamGuXiang</string>
     <string name="about_author_badge">作者</string>
-    <string name="about_author_role">LeviLauncher 作者</string>
+    <string name="about_author_role">BiniFn 作者</string>
     <string name="about_afdian">爱发电</string>
     <string name="about_patreon">Patreon</string>
     <string name="about_source_title">源代码与开源</string>
-    <string name="about_github_repo">GitHub · LeviLauncher</string>
-    <string name="about_github_org">LiteLDev</string>
+    <string name="about_github_repo">GitHub · BiniFn</string>
+    <string name="about_github_org">BiniFn</string>
     <string name="about_license_note">许可证详情请参阅仓库中的 LICENSE。</string>
     <string name="about_contribute_title">参与贡献</string>
-    <string name="about_contribute_desc">欢迎通过 Issues 或 Pull Requests 改进 LeviLauncher。</string>
+    <string name="about_contribute_desc">欢迎通过 Issues 或 Pull Requests 改进 BiniFn。</string>
     <string name="about_issues">Issue</string>
     <string name="about_star_fork">Star / Fork</string>
     <string-array name="launcher_tips">
         <item>在设置中可以调整主题、颜色、背景和其他外观选项，让启动器更符合你的使用习惯。</item>
-        <item>LeviLauncher 是开源项目。你可以通过 GitHub Issues 反馈启动器问题或提出改进建议。</item>
+        <item>BiniFn 是开源项目。你可以通过 GitHub Issues 反馈启动器问题或提出改进建议。</item>
         <item>使用版本下拉菜单可以快速切换当前实例。</item>
         <item>真的有人会读这些提示吗？</item>
         <item>你可以拖动模组来调整加载优先级。</item>
@@ -642,5 +642,5 @@
     <string name="clear">清除</string>
 
     <string name="unsupported_version_title">不支持的版本</string>
-    <string name="unsupported_version_msg">此启动器不支持早于 1.21.80 的 Minecraft 版本。</string>
+    <string name="unsupported_version_msg">This launcher supports all Minecraft versions.</string>
 </resources>

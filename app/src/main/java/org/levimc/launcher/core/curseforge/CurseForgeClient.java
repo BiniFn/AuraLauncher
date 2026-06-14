@@ -22,7 +22,7 @@ public class CurseForgeClient {
     private static final String BASE_URL = "https://api.curseforge.com";
     private static final String API_KEY = BuildConfig.CURSEFORGE_API_KEY;
 
-    public static final int GAME_ID_MINECRAFT = 78022;
+    public static final int GAME_ID_MINECRAFT = 61448;
 
     public static final String SORT_POPULARITY = "2";
     public static final String SORT_LAST_UPDATED = "3";
@@ -31,6 +31,8 @@ public class CurseForgeClient {
     
     private final OkHttpClient client;
     private final Gson gson;
+    private long lastRequestTime = 0;
+    private static final long MIN_REQUEST_INTERVAL = 500; // 500ms between requests
 
     private static CurseForgeClient instance;
 
@@ -55,9 +57,22 @@ public class CurseForgeClient {
         void onError(Throwable t);
     }
 
+    private synchronized boolean checkRateLimit(CurseForgeCallback<?> callback) {
+        long now = System.currentTimeMillis();
+        if (now - lastRequestTime < MIN_REQUEST_INTERVAL) {
+            callback.onError(new Exception("Too many requests. Please wait."));
+            return false;
+        }
+        lastRequestTime = now;
+        return true;
+    }
+
     public void searchContent(String query, int classId, String version, int index, int pageSize, String sortField, String sortOrder, CurseForgeCallback<ContentSearchResponse> callback) {
+        if (!checkRateLimit(callback)) return;
+
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "/v1/mods/search").newBuilder();
         urlBuilder.addQueryParameter("gameId", String.valueOf(GAME_ID_MINECRAFT));
+        urlBuilder.addQueryParameter("modLoaderType", "0");
         urlBuilder.addQueryParameter("sortField", sortField != null ? sortField : SORT_POPULARITY);
         urlBuilder.addQueryParameter("sortOrder", sortOrder != null ? sortOrder : "desc");
         urlBuilder.addQueryParameter("index", String.valueOf(index));
@@ -104,6 +119,8 @@ public class CurseForgeClient {
     }
 
     public void getContentDescription(int contentId, CurseForgeCallback<String> callback) {
+        if (!checkRateLimit(callback)) return;
+
         String url = BASE_URL + "/v1/mods/" + contentId + "/description";
         Request request = new Request.Builder()
                 .url(url)
@@ -136,6 +153,8 @@ public class CurseForgeClient {
     }
 
     public void getModFiles(int modId, int index, int pageSize, CurseForgeCallback<ModFilesResponse> callback) {
+        if (!checkRateLimit(callback)) return;
+
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "/v1/mods/" + modId + "/files").newBuilder();
         urlBuilder.addQueryParameter("index", String.valueOf(index));
         urlBuilder.addQueryParameter("pageSize", String.valueOf(pageSize));

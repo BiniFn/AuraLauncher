@@ -16,12 +16,17 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import org.levimc.launcher.R;
 import org.levimc.launcher.databinding.ActivitySplashBinding;
+import org.levimc.launcher.util.GalleryUtils;
+import org.levimc.launcher.util.PermissionsHandler;
 import org.levimc.launcher.util.PersonalizationManager;
 
+import java.io.File;
 import java.util.Locale;
 
 @SuppressLint("CustomSplashScreen")
@@ -35,6 +40,7 @@ public class SplashActivity extends BaseActivity {
     private ValueAnimator orbitAnimator;
     private ObjectAnimator progressAnimator;
     private ValueAnimator glowPulseAnimator;
+    private ActivityResultLauncher<Intent> permissionResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,14 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        permissionResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    PermissionsHandler.getInstance().onActivityResult(result.getResultCode(), result.getData());
+                }
+        );
+        PermissionsHandler.getInstance().setActivity(this, permissionResultLauncher);
 
         applySplashTheme();
 
@@ -60,6 +74,8 @@ public class SplashActivity extends BaseActivity {
         binding.tvPreparing.setAlpha(0f);
 
         createNoMediaFile();
+        migrateDataFolder();
+        GalleryUtils.protectAllDirectories();
 
         binding.getRoot().post(this::startSplashSequence);
     }
@@ -68,11 +84,32 @@ public class SplashActivity extends BaseActivity {
         try {
             java.io.File baseDir = new java.io.File(
                 android.os.Environment.getExternalStorageDirectory(), 
-                "games/org.levimc"
+                ".games/org.levimc"
             );
             if (!baseDir.exists()) baseDir.mkdirs();
             java.io.File noMediaFile = new java.io.File(baseDir, ".nomedia");
             if (!noMediaFile.exists()) noMediaFile.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void migrateDataFolder() {
+        try {
+            File externalStorage = android.os.Environment.getExternalStorageDirectory();
+            File oldDir = new File(externalStorage, "games/org.levimc");
+            File newDir = new File(externalStorage, ".games/org.levimc");
+
+            if (oldDir.exists() && oldDir.isDirectory()) {
+                if (!newDir.exists()) {
+                    newDir.getParentFile().mkdirs();
+                    if (oldDir.renameTo(newDir)) {
+                        android.util.Log.d("SplashActivity", "Migrated data folder from games/org.levimc to .games/org.levimc");
+                    } else {
+                        android.util.Log.e("SplashActivity", "Failed to migrate data folder");
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -289,8 +326,24 @@ public class SplashActivity extends BaseActivity {
 
     private void navigateToMain() {
         if (navigated) return;
-        navigated = true;
 
+        PermissionsHandler.getInstance().requestPermission(PermissionsHandler.PermissionType.STORAGE, new PermissionsHandler.PermissionResultCallback() {
+            @Override
+            public void onPermissionGranted(PermissionsHandler.PermissionType type) {
+                performNavigation();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionsHandler.PermissionType type, boolean permanentlyDenied) {
+                // If they deny, we can't really do much since the app needs storage.
+                // But we'll let them through for now or prompt again if needed.
+                performNavigation();
+            }
+        });
+    }
+
+    private void performNavigation() {
+        navigated = true;
         binding.getRoot().animate()
             .alpha(0f)
             .setDuration(300)
@@ -301,6 +354,12 @@ public class SplashActivity extends BaseActivity {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             })
             .start();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsHandler.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void syncSystemLocale() {

@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.firebase.crashlytics)
 }
 
 def localProperties = new Properties()
@@ -43,7 +41,7 @@ android {
         minSdkVersion 28
         targetSdkVersion 35
         versionCode getVersionCodeByTimestamp()
-        versionName getGitTag()
+        versionName "69.67.Tung Tung Sahur Prime"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "CURSEFORGE_API_KEY", "\"${localProperties.getProperty('curseforge.api_key', '')}\""
         ndk {
@@ -68,11 +66,9 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-            }
             ndk {
                 debugSymbolLevel 'FULL'
             }
@@ -81,9 +77,6 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-            }
             ndk {
                 debugSymbolLevel 'FULL'
             }
@@ -91,12 +84,9 @@ android {
         }
         beta {
             initWith release
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-                nativeSymbolUploadEnabled true
-            }
             resValue "string", "app_name", "LeviLauncher Beta"
             buildConfigField "boolean", "IS_BETA", "true"
             matchingFallbacks = ["release"]
@@ -107,8 +97,10 @@ android {
 
     }
     packagingOptions {
+        jniLibs {
+            keepDebugSymbols += ['**/*.so']
+        }
         jniLibs.useLegacyPackaging = true
-        doNotStrip "**/*.so"
         resources.excludes += [
                 "DebugProbesKt.bin"
         ]
@@ -136,10 +128,6 @@ android {
 dependencies {
     implementation project(':minecraft')
     implementation project(':minecraft-msftauth')
-    implementation platform(libs.firebase.bom)
-    implementation libs.firebase.analytics
-    implementation libs.firebase.crashlytics
-    implementation libs.firebase.crashlytics.ndk
     implementation libs.core.splashscreen
     implementation libs.appcompat
     implementation libs.conscrypt.android

@@ -32,7 +32,9 @@ class GamePackageManager private constructor(
     private val knownPackages = arrayOf(
         "com.mojang.minecraftpe",
         "com.mojang.minecraftpe.beta",
-        "com.mojang.minecraftpe.preview"
+        "com.mojang.minecraftpe.preview",
+        "com.mojang.minecrafttrial",
+        "com.mojang.minecraftedu"
     )
 
     private val requiredLibs = arrayOf(

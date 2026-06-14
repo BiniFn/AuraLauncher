@@ -333,7 +333,7 @@ public class VersionManager {
             installedVersions.add(gv);
         }
 
-        File baseDir = new File(Environment.getExternalStorageDirectory(), "games/org.levimc/minecraft/");
+        File baseDir = new File(Environment.getExternalStorageDirectory(), ".games/org.levimc/minecraft/");
         File[] dirs = baseDir.listFiles(File::isDirectory);
 
         if (dirs != null) {
@@ -365,7 +365,7 @@ public class VersionManager {
     @NonNull
     private File getVersionDirForPackage(String packageName) {
         return new File(Environment.getExternalStorageDirectory(),
-                "games/org.levimc/minecraft/" + packageName);
+                ".games/org.levimc/minecraft/" + packageName);
     }
 
     private boolean hasSoFilesInDir(File nativeLibDir) {

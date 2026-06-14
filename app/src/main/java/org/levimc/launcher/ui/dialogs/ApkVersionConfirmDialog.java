@@ -171,7 +171,7 @@ public class ApkVersionConfirmDialog extends DialogFragment {
     }
 
     private boolean ensureBaseDirectoryExists() {
-        File baseDir = new File(Environment.getExternalStorageDirectory(), "games/org.levimc/minecraft");
+        File baseDir = new File(Environment.getExternalStorageDirectory(), ".games/org.levimc/minecraft");
         if (!baseDir.exists()) {
             return baseDir.mkdirs();
         }
@@ -179,7 +179,7 @@ public class ApkVersionConfirmDialog extends DialogFragment {
     }
 
     private boolean isVersionExist(String name) {
-        File baseDir = new File(Environment.getExternalStorageDirectory(), "games/org.levimc/minecraft");
+        File baseDir = new File(Environment.getExternalStorageDirectory(), ".games/org.levimc/minecraft");
         if (!baseDir.exists()) return false;
         File targetDir = new File(baseDir, name);
         return targetDir.exists();

@@ -7,8 +7,6 @@ import android.os.Build
 import android.os.Environment
 import android.os.Process
 import android.os.SystemClock
-import com.google.firebase.FirebaseApp
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.levimc.launcher.BuildConfig
 import org.levimc.launcher.settings.FeatureSettings
 import org.levimc.launcher.ui.activities.CrashActivity
@@ -59,16 +57,12 @@ object CrashReporter {
 
     @JvmStatic
     fun sendUnsentReports() {
-        if (!isCrashlyticsEnabled()) return
-        try {
-            FirebaseCrashlytics.getInstance().sendUnsentReports()
-        } catch (_: Throwable) {
-        }
+        // Firebase removed
     }
 
     @JvmStatic
     fun refreshCrashlyticsCollection(context: Context) {
-        configureCrashlytics(context.applicationContext)
+        // Firebase removed
     }
 
     @JvmStatic
@@ -114,83 +108,31 @@ object CrashReporter {
         emergency: String?,
         summary: String
     ) {
-        if (!isCrashlyticsEnabled()) return
-        try {
-            FirebaseCrashlytics.getInstance().apply {
-                setCustomKey("last_crash_type", crashType)
-                setCustomKey("last_crash_summary", trimCrashlyticsValue(summary))
-                setCustomKey("version_name", BuildConfig.VERSION_NAME)
-                setCustomKey("version_code", BuildConfig.VERSION_CODE)
-                setCustomKey("is_beta", BuildConfig.IS_BETA)
-                setCustomKey("build_type", BuildConfig.BUILD_TYPE)
-                if (!logPath.isNullOrBlank()) {
-                    setCustomKey("local_crash_log", trimCrashlyticsValue(logPath))
-                    log("xCrash local log: $logPath")
-                }
-                if (!emergency.isNullOrBlank()) {
-                    log("xCrash emergency: ${trimCrashlyticsValue(emergency)}")
-                }
-                recordException(XCrashCapturedException(crashType, summary))
-            }
-        } catch (_: Throwable) {
-        }
+        // Firebase removed
     }
 
     private fun configureCrashlytics(context: Context) {
-        if (!ensureFirebaseInitialized(context)) return
-        try {
-            FirebaseCrashlytics.getInstance().apply {
-                val uploadEnabled = isCrashUploadEnabled()
-                setCrashlyticsCollectionEnabled(uploadEnabled)
-                if (!uploadEnabled) {
-                    deleteUnsentReports()
-                    return
-                }
-                setCustomKey("version_name", BuildConfig.VERSION_NAME)
-                setCustomKey("version_code", BuildConfig.VERSION_CODE)
-                setCustomKey("is_beta", BuildConfig.IS_BETA)
-                setCustomKey("build_type", BuildConfig.BUILD_TYPE)
-            }
-        } catch (_: Throwable) {
-        }
+        // Firebase removed
     }
 
     private fun recordHandlerError(error: Throwable) {
-        if (!isCrashlyticsEnabled()) return
-        try {
-            FirebaseCrashlytics.getInstance().recordException(error)
-        } catch (_: Throwable) {
-        }
+        // Firebase removed
     }
 
     private fun ensureFirebaseInitialized(context: Context): Boolean {
-        if (!isCrashlyticsAvailable()) return false
-        return try {
-            if (FirebaseApp.getApps(context).isEmpty()) {
-                FirebaseApp.initializeApp(context)
-            }
-            FirebaseApp.getApps(context).isNotEmpty()
-        } catch (_: Throwable) {
-            false
-        }
+        return false
     }
 
     private fun isCrashlyticsEnabled(): Boolean {
-        return isCrashlyticsAvailable() && isCrashUploadEnabled()
+        return false
     }
 
     private fun isCrashlyticsAvailable(): Boolean {
-        return BuildConfig.BUILD_TYPE == "debug" ||
-            BuildConfig.BUILD_TYPE == "release" ||
-            BuildConfig.BUILD_TYPE == "beta"
+        return false
     }
 
     private fun isCrashUploadEnabled(): Boolean {
-        return try {
-            FeatureSettings.getInstance().isCrashUploadEnabled
-        } catch (_: Throwable) {
-            true
-        }
+        return false
     }
 
     private fun isCrashProcess(): Boolean {
@@ -198,7 +140,7 @@ object CrashReporter {
     }
 
     private fun crashLogDir(context: Context): File {
-        val primary = File(Environment.getExternalStorageDirectory(), "games/org.levimc/crash_logs")
+        val primary = File(Environment.getExternalStorageDirectory(), ".games/org.levimc/crash_logs")
         if (canUsePublicExternalStorage() && ensureWritableDir(primary)) return primary
 
         val externalRoot = context.getExternalFilesDir(null)

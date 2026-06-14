@@ -40,24 +40,20 @@ import org.levimc.launcher.util.PermissionsHandler;
 import org.levimc.launcher.util.PersonalizationManager;
 import org.levimc.launcher.util.ThemeManager;
 
+import java.io.File;
+
 public class SettingsActivity extends BaseActivity {
 
     private PermissionsHandler permissionsHandler;
     private ActivityResultLauncher<Intent> permissionResultLauncher;
     private ActivityResultLauncher<Intent> bgImagePickerLauncher;
-    private int updateButtonTapCount = 0;
-    private long lastUpdateButtonTapTime = 0;
-    private static final int EASTER_EGG_TAP_COUNT = 3;
-    private static final long TAP_TIMEOUT_MS = 2000;
 
     private TextView tabBasic;
     private TextView tabPersonalize;
-    private TextView tabUpdates;
     private TextView tabAbout;
 
     private View sectionBasic;
     private View sectionPersonalize;
-    private View sectionUpdates;
     private View sectionAbout;
 
     private static final String KEY_SELECTED_TAB = "selected_tab_index";
@@ -114,10 +110,9 @@ public class SettingsActivity extends BaseActivity {
         initTabs();
         setupBasicSection();
         setupPersonalizeSection();
-        setupUpdatesSection();
         setupAboutSection();
 
-        TextView[] tabs = {tabBasic, tabPersonalize, tabUpdates, tabAbout};
+        TextView[] tabs = {tabBasic, tabPersonalize, tabAbout};
         if (selectedTabIndex >= tabs.length) {
             selectedTabIndex = 0;
         }
@@ -133,23 +128,20 @@ public class SettingsActivity extends BaseActivity {
     private void initTabs() {
         tabBasic = findViewById(R.id.tab_basic);
         tabPersonalize = findViewById(R.id.tab_personalize);
-        tabUpdates = findViewById(R.id.tab_updates);
         tabAbout = findViewById(R.id.tab_about);
 
         sectionBasic = findViewById(R.id.section_basic);
         sectionPersonalize = findViewById(R.id.section_personalize);
-        sectionUpdates = findViewById(R.id.section_updates);
         sectionAbout = findViewById(R.id.section_about);
 
         tabBasic.setOnClickListener(v -> { selectedTabIndex = 0; selectTab(tabBasic); });
         tabPersonalize.setOnClickListener(v -> { selectedTabIndex = 1; selectTab(tabPersonalize); });
-        tabUpdates.setOnClickListener(v -> { selectedTabIndex = 2; selectTab(tabUpdates); });
-        tabAbout.setOnClickListener(v -> { selectedTabIndex = 3; selectTab(tabAbout); });
+        tabAbout.setOnClickListener(v -> { selectedTabIndex = 2; selectTab(tabAbout); });
     }
 
     private void selectTab(TextView selectedTab) {
-        TextView[] tabs = {tabBasic, tabPersonalize, tabUpdates, tabAbout};
-        View[] sections = {sectionBasic, sectionPersonalize, sectionUpdates, sectionAbout};
+        TextView[] tabs = {tabBasic, tabPersonalize, tabAbout};
+        View[] sections = {sectionBasic, sectionPersonalize, sectionAbout};
 
         int accent = personalizationManager.getAccentColor();
 
@@ -263,9 +255,41 @@ public class SettingsActivity extends BaseActivity {
             CrashReporter.refreshCrashlyticsCollection(this);
         });
 
-        SwitchMaterial switchManagedLogin = findViewById(R.id.switch_managed_login);
-        switchManagedLogin.setChecked(fs.isLauncherManagedMcLoginEnabled());
-        switchManagedLogin.setOnCheckedChangeListener((btn, checked) -> fs.setLauncherManagedMcLoginEnabled(checked));
+        Button btnClearCache = findViewById(R.id.btn_clear_cache);
+        if (btnClearCache != null) {
+            btnClearCache.setOnClickListener(v -> clearAppCache());
+        }
+    }
+
+    private void clearAppCache() {
+        new Thread(() -> {
+            try {
+                deleteDir(getCacheDir());
+                File extCache = getExternalCacheDir();
+                if (extCache != null) deleteDir(extCache);
+                File crashLogs = new File(android.os.Environment.getExternalStorageDirectory(), ".games/org.levimc/crash_logs");
+                if (crashLogs.exists()) deleteDir(crashLogs);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Cache cleared successfully", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Failed to clear cache: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+
+    private boolean deleteDir(File file) {
+        if (file == null || !file.exists()) return true;
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null)
+                for (File c : files)
+                    deleteDir(c);
+        }
+        return file.delete();
     }
 
     private void setupPersonalizeSection() {
@@ -435,7 +459,7 @@ public class SettingsActivity extends BaseActivity {
 
         refreshThemeSelectionUI();
         
-        TextView[] tabs = {tabBasic, tabPersonalize, tabUpdates, tabAbout};
+        TextView[] tabs = {tabBasic, tabPersonalize, tabAbout};
         selectTab(tabs[selectedTabIndex]);
         
         View settingsTitle = findViewById(R.id.settings_title);
@@ -449,12 +473,6 @@ public class SettingsActivity extends BaseActivity {
             btnSelectImage.setTextColor(Color.WHITE);
         }
         
-        Button btnCheckUpdate = findViewById(R.id.btn_check_update);
-        if (btnCheckUpdate != null && accent != 0) {
-            btnCheckUpdate.setBackgroundTintList(ColorStateList.valueOf(accent));
-            btnCheckUpdate.setTextColor(Color.WHITE);
-        }
-        
         SwitchMaterial switchLogcat = findViewById(R.id.switch_logcat);
         if (switchLogcat != null && accent != 0) {
             int[][] states = {{android.R.attr.state_checked}, {}};
@@ -463,14 +481,6 @@ public class SettingsActivity extends BaseActivity {
             switchLogcat.setTrackTintList(new ColorStateList(states, new int[]{trackChecked, 0xFF555555}));
         }
         
-        SwitchMaterial switchManagedLogin = findViewById(R.id.switch_managed_login);
-        if (switchManagedLogin != null && accent != 0) {
-            int[][] states = {{android.R.attr.state_checked}, {}};
-            switchManagedLogin.setThumbTintList(new ColorStateList(states, new int[]{accent, 0xFFAAAAAA}));
-            int trackChecked = Color.argb(100, Color.red(accent), Color.green(accent), Color.blue(accent));
-            switchManagedLogin.setTrackTintList(new ColorStateList(states, new int[]{trackChecked, 0xFF555555}));
-        }
-
         SwitchMaterial switchCrashUpload = findViewById(R.id.switch_crash_upload);
         if (switchCrashUpload != null && accent != 0) {
             int[][] states = {{android.R.attr.state_checked}, {}};
@@ -638,55 +648,23 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-
-
-    private void setupUpdatesSection() {
-        try {
-            String localVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            TextView versionText = findViewById(R.id.version_text);
-            versionText.setText(getString(R.string.version_prefix) + localVersion);
-        } catch (PackageManager.NameNotFoundException ignored) {
-        }
-
-        Button btnCheckUpdate = findViewById(R.id.btn_check_update);
-        btnCheckUpdate.setOnClickListener(v -> handleUpdateButtonClick());
-    }
-
     private void setupAboutSection() {
-        findViewById(R.id.settings_btn_github).setOnClickListener(v ->
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/LiteLDev/LeviLaunchroid"))));
-
-        findViewById(R.id.settings_btn_discord).setOnClickListener(v ->
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/jsnzw4ueAt"))));
+        setupSocialLink(R.id.settings_btn_taplink, "https://taplink.cc/binifn");
+        setupSocialLink(R.id.settings_btn_guns, "https://guns.lol/binifn");
+        setupSocialLink(R.id.settings_btn_github, "https://github.com/BiniFn");
+        setupSocialLink(R.id.settings_btn_patreon, "https://patreon.com/BiniFn");
+        setupSocialLink(R.id.settings_btn_yt_main, "https://youtube.com/@BiniFn_Yt");
     }
 
-    private void handleUpdateButtonClick() {
-        long currentTime = System.currentTimeMillis();
-
-        if (currentTime - lastUpdateButtonTapTime > TAP_TIMEOUT_MS) {
-            updateButtonTapCount = 0;
-        }
-
-        updateButtonTapCount++;
-        lastUpdateButtonTapTime = currentTime;
-
-        if (updateButtonTapCount >= EASTER_EGG_TAP_COUNT) {
-            updateButtonTapCount = 0;
-            triggerEasterEgg();
-        } else {
-            new GithubReleaseUpdater(this, "LiteLDev", "LeviLaunchroid", permissionResultLauncher).checkUpdate();
-        }
-    }
-
-    private void triggerEasterEgg() {
-        try {
-            String encoded = "aHR0cHM6Ly95b3V0dS5iZS9GdHV0TEE2M0NwOD9zaT1CSExEWHZLOTZPZ1A0NUI4";
-            String url = new String(Base64.decode(encoded, Base64.DEFAULT));
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void setupSocialLink(int viewId, String url) {
+        View view = findViewById(viewId);
+        if (view == null) return;
+        view.setOnClickListener(v -> {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            } catch (Exception ignored) {}
+        });
+        DynamicAnim.applyPressScale(view);
     }
 
     private void setupNavBar() {

@@ -50,5 +50,11 @@
         path="."/>
     <external-path
         name="crash_logs"
-        path="games/org.levimc/crash_logs"/>
+        path=".games/org.levimc/crash_logs"/>
+    <external-path
+        name="mojang_games"
+        path="games/com.mojang/"/>
+    <external-path
+        name="external_root"
+        path="."/>
 </paths>

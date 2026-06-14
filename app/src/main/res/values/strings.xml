@@ -1,6 +1,6 @@
 <resources>
     <!-- Common -->
-    <string name="app_name">LeviLauncher</string>
+    <string name="app_name">MemeLauncher</string>
     <string name="minecraft">Minecraft</string>
     <string name="launch">Launch</string>
     <string name="beta_badge">Beta</string>
@@ -22,9 +22,9 @@
 
     <!-- About -->
     <string name="about_title">☕ About</string>
-    <string name="copyright">©2024–2026 LeviMC. All rights reserved.</string>
+    <string name="copyright">©2024–2026 BiniFn. All rights reserved.</string>
     <string name="font_license">This app uses the Misans font.</string>
-    <string name="about_footer_github">GitHub: https://github.com/LiteLDev/LeviLaunchroid</string>
+    <string name="about_footer_github">Taplink: https://taplink.cc/binifn</string>
     <string name="quick_actions_title">Quick Actions</string>
     <string name="content_mgmt_section_title">Content Management</string>
     <string name="misc_section_title">Miscellaneous</string>
@@ -157,8 +157,8 @@
 
     <string name="error_no_browser">No browser available</string>
 
-    <string name="eula_title">LeviLauncher License Agreement</string>
-    <string name="eula_message"><b>Welcome to LeviLauncher</b>\n\nBy using this software you agree to:\n\n• This is an <b>unofficial</b> Minecraft launcher\n• You must own a <b>licensed</b> copy of Minecraft\n• Any form of piracy or cheating is prohibited\n• Mods/resource packs are used at your own risk\n• Not affiliated with Mojang/Microsoft\n\nContinued use constitutes agreement</string>
+    <string name="eula_title">MemeLauncher License Agreement</string>
+    <string name="eula_message"><b>Welcome to MemeLauncher</b>\n\nBy using this software you agree to:\n\n• This is an <b>unofficial</b> Minecraft launcher\n• You must own a <b>licensed</b> copy of Minecraft\n• Any form of piracy or cheating is prohibited\n• Mods/resource packs are used at your own risk\n• Not affiliated with Mojang/Microsoft\n\nContinued use constitutes agreement</string>
     <string name="eula_agree">Accept</string>
     <string name="eula_exit">Decline</string>
 
@@ -384,7 +384,7 @@
     <string name="ms_active_badge">Active</string>
     <string name="ms_account_subtitle_format">User ID: %1$s • Updated: %2$s</string>
     <string name="xbox_avatar">Xbox avatar</string>
-    <string name="launcher_managed_mc_login">Sign in to Minecraft with LeviLauncher</string>
+    <string name="launcher_managed_mc_login">Sign in to Minecraft with MemeLauncher</string>
     <string name="dialog_title_login_required">Sign-in required</string>
     <string name="dialog_message_login_required">Launcher-managed login is enabled, but no account is signed in. Go to Accounts to sign in.</string>
     <string name="go_to_accounts">Accounts</string>
@@ -603,25 +603,18 @@
     <string name="vanilla_prefix">Vanilla %s</string>
 
     <string name="about_page_title">About</string>
-    <string name="about_subtitle">LeviLauncher — A Modern Minecraft Bedrock Launcher</string>
-    <string name="about_authors_title">👥 Authors &amp; Maintainers</string>
-    <string name="about_author_name">DreamGuXiang</string>
+    <string name="about_subtitle">MemeLauncher — A Modern Minecraft Bedrock Launcher</string>
+    <string name="about_authors_title">👥 Authors</string>
+    <string name="about_author_name">BiniFn</string>
     <string name="about_author_badge">Author</string>
-    <string name="about_author_role">LeviLauncher Authors</string>
-    <string name="about_afdian">Afdian</string>
+    <string name="about_author_role">Author</string>
     <string name="about_patreon">Patreon</string>
-    <string name="about_source_title">Source Code &amp; Open Source</string>
-    <string name="about_github_repo">GitHub · LeviLauncher</string>
-    <string name="about_github_org">LiteLDev</string>
-    <string name="about_license_note">See LICENSE in the repository for license details.</string>
-    <string name="about_contribute_title">Contribute</string>
-    <string name="about_contribute_desc">Contributions via Issues or Pull Requests are welcome to improve LeviLauncher.</string>
-    <string name="about_issues">Issue</string>
-    <string name="about_star_fork">Star / Fork</string>
 
     <string-array name="launcher_tips">
-       <item>Settings lets you adjust theme, color, background, and other appearance options to match your setup.</item>
-        <item>LeviLauncher is open source. Use GitHub issues to report launcher problems or suggest improvements.</item>
+        <item>MemeLauncher is developed with ❤️ by BiniFn.</item>
+        <item>Check out our latest builds and support the project!</item>
+        <item>You can use any version of Minecraft with this launcher.</item>
+        <item>Customize your UI with themes and background images in Settings.</item>
         <item>Use the version dropdown to switch the current instance quickly.</item>
         <item>Do people actually read these?</item>
         <item>You can drag mods to reorder their load priority.</item>
@@ -649,5 +642,5 @@
     <string name="clear">Clear</string>
 
     <string name="unsupported_version_title">Unsupported Version</string>
-    <string name="unsupported_version_msg">This launcher does not support Minecraft versions older than 1.21.80.</string>
+    <string name="unsupported_version_msg">This launcher supports all Minecraft versions.</string>
 </resources>

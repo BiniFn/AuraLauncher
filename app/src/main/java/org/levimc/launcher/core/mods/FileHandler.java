@@ -174,7 +174,9 @@ public class FileHandler {
         }
 
         String lowerName = fileName.toLowerCase(Locale.ROOT);
-        return lowerName.endsWith(".zip") || lowerName.endsWith(".levipack");
+        return lowerName.endsWith(".zip") || lowerName.endsWith(".levipack") 
+                || lowerName.endsWith(".mcworld") || lowerName.endsWith(".mcpack") 
+                || lowerName.endsWith(".mcaddon");
     }
 
     private boolean isZipModPackageFile(Uri uri, String fileName) {

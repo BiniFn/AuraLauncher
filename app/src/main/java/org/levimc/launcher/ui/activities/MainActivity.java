@@ -37,15 +37,12 @@ import org.levimc.launcher.settings.FeatureSettings;
 
 import org.levimc.launcher.ui.animation.DynamicAnim;
 import org.levimc.launcher.ui.dialogs.CustomAlertDialog;
-import org.levimc.launcher.ui.dialogs.PlayStoreValidationDialog;
 import org.levimc.launcher.ui.views.MainViewModel;
 import org.levimc.launcher.ui.views.MainViewModelFactory;
 import org.levimc.launcher.util.ApkImportManager;
-import org.levimc.launcher.util.GithubReleaseUpdater;
 import org.levimc.launcher.util.LanguageManager;
 import org.levimc.launcher.util.PermissionsHandler;
 import org.levimc.launcher.util.PersonalizationManager;
-import org.levimc.launcher.util.PlayStoreValidator;
 import org.levimc.launcher.util.ResourcepackHandler;
 import org.levimc.launcher.util.UIHelper;
 import org.levimc.launcher.core.content.ContentManager;
@@ -125,7 +122,7 @@ import okhttp3.OkHttpClient;
             checkResourcepack();
             handleIncomingFiles();
         }
-        new GithubReleaseUpdater(this, "LiteLDev", "LeviLaunchroid", permissionResultLauncher).checkUpdateOnLaunch();
+        // new GithubReleaseUpdater(this, "LiteLDev", "LeviLaunchroid", permissionResultLauncher).checkUpdateOnLaunch();
         repairNeededVersions();
         requestBasicPermissions();
         showEulaIfNeeded();
@@ -843,13 +840,6 @@ import okhttp3.OkHttpClient;
                     })
                     .setNegativeButton(getString(R.string.dialog_negative_cancel), null)
                     .show();
-            return;
-        }
-
-        if (!PlayStoreValidator.isMinecraftFromPlayStore(this)) {
-            trace.warning("Launch cancelled", "Minecraft is not verified as Play Store install");
-            binding.launchButton.setEnabled(true);
-            PlayStoreValidationDialog.showNotFromPlayStoreDialog(this);
             return;
         }
 

@@ -74,7 +74,7 @@ public class ApkInstaller {
                 File internalDir = new File(context.getDataDir(), "minecraft/" + dirName);
                 if (internalDir.exists() && !deleteDir(internalDir))
                     return;
-                File externalDir = new File(Environment.getExternalStorageDirectory(), "games/org.levimc/minecraft/" + dirName);
+                File externalDir = new File(Environment.getExternalStorageDirectory(), ".games/org.levimc/minecraft/" + dirName);
                 if (externalDir.exists() && !deleteDir(externalDir))
                     return;
                 postProgress(5);

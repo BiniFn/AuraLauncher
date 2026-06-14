@@ -79,11 +79,11 @@ public class CurseForgeActivity extends BaseActivity {
     
     private void setupData() {
         categories.add(new Category("All Categories", 0));
-        categories.add(new Category("Addons", 4984));
-        categories.add(new Category("Maps", 6913));
-        categories.add(new Category("Skins", 6925));
-        categories.add(new Category("Texture Packs", 6929));
-        categories.add(new Category("Scripts", 6940));
+        categories.add(new Category("Addons", 4981));
+        categories.add(new Category("Worlds", 5240));
+        categories.add(new Category("Texture Packs", 4979));
+        categories.add(new Category("Skins", 6204));
+        categories.add(new Category("Scripts", 6205));
 
         sortOptions.add(new SortOption("Relevancy", CurseForgeClient.SORT_POPULARITY, "desc"));
         sortOptions.add(new SortOption("Total Downloads", CurseForgeClient.SORT_TOTAL_DOWNLOADS, "desc"));
