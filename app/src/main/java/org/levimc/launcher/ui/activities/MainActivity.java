@@ -1070,7 +1070,17 @@ import okhttp3.OkHttpClient;
     }
 
     private void startApkFilePicker() {
-        apkImportResultLauncher.launch(StorageAccess.downloadsPicker(false));
+        new CustomAlertDialog(this)
+                .setTitleText(getString(R.string.import_apk_subtitle))
+                .setMessage("If you don't got a apk yet get one from here:\nhttps://mcpedl.org/downloading/\n\nMake sure you use an adblocker cuz allot of ads, not my fault if you click ads")
+                .setPositiveButton("Select APK", v -> apkImportResultLauncher.launch(StorageAccess.downloadsPicker(false)))
+                .setNeutralButton("Get APK", v -> {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://mcpedl.org/downloading/")));
+                    } catch (Exception ignored) {}
+                })
+                .setNegativeButton(getString(R.string.dialog_negative_cancel), null)
+                .show();
     }
 
     private void openContentManagement() {

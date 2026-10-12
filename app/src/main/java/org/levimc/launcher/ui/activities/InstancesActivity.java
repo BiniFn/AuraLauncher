@@ -3,6 +3,7 @@ package org.levimc.launcher.ui.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -320,7 +321,17 @@ public class InstancesActivity extends BaseActivity {
     }
 
     private void startApkFilePicker() {
-        apkImportResultLauncher.launch(StorageAccess.downloadsPicker(false));
+        new org.levimc.launcher.ui.dialogs.CustomAlertDialog(this)
+                .setTitleText(getString(R.string.import_apk_subtitle))
+                .setMessage("If you don't got a apk yet get one from here:\nhttps://mcpedl.org/downloading/\n\nMake sure you use an adblocker cuz allot of ads, not my fault if you click ads")
+                .setPositiveButton("Select APK", v -> apkImportResultLauncher.launch(StorageAccess.downloadsPicker(false)))
+                .setNeutralButton("Get APK", v -> {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://mcpedl.org/downloading/")));
+                    } catch (Exception ignored) {}
+                })
+                .setNegativeButton(getString(R.string.dialog_negative_cancel), null)
+                .show();
     }
 
     private void startBackupImportPicker() {

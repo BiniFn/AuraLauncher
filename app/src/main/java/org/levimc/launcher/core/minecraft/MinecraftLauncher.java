@@ -94,35 +94,7 @@ public class MinecraftLauncher {
                 return;
             }
 
-            if (version.versionCode != null) {
-                try {
-                    String[] parts = version.versionCode.split("\\.");
-                    if (parts.length >= 2) {
-                        int major = Integer.parseInt(parts[0].replaceAll("\\D", ""));
-                        int minor = Integer.parseInt(parts[1].replaceAll("\\D", ""));
-                        int patch = 0;
-                        if (parts.length > 2) {
-                            String patchStr = parts[2].replaceAll("\\D.*", "");
-                            if (!patchStr.isEmpty()) {
-                                patch = Integer.parseInt(patchStr);
-                            }
-                        }
-                        if (major < 1 || (major == 1 && minor < 21) || (major == 1 && minor == 21 && patch < 80)) {
-                            activity.runOnUiThread(() -> {
-                                new org.levimc.launcher.ui.dialogs.CustomAlertDialog(activity)
-                                        .setTitleText(activity.getString(org.levimc.launcher.R.string.unsupported_version_title))
-                                        .setMessage(activity.getString(org.levimc.launcher.R.string.unsupported_version_msg))
-                                        .setPositiveButton(activity.getString(org.levimc.launcher.R.string.back), null)
-                                        .show();
-                            });
-                            notifyLaunchFailed(callback, new IllegalStateException("Unsupported version"));
-                            return;
-                        }
-                    }
-                } catch (Exception e) {
-                    // Ignore parsing errors and let it launch
-                }
-            }
+            // Allow any Minecraft version to launch without restrictions
 
             if (version.needsRepair) {
                 activity.runOnUiThread(() ->

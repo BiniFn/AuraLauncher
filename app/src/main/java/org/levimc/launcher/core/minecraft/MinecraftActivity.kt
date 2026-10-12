@@ -98,6 +98,7 @@ class MinecraftActivity : MainActivity(), PojavControlsHost {
         LauncherBackgroundController.awaitShutdown()
         trace = LaunchTrace.ensure(intent)
         trace.mark("MinecraftActivity onCreate entered")
+        applyPerformanceMode()
         window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(resolveLaunchBackgroundColor()))
 
         if (savedInstanceState != null) {
@@ -145,6 +146,36 @@ class MinecraftActivity : MainActivity(), PojavControlsHost {
         PreloaderInput.setActivity(this)
         MinecraftActivityState.onCreated(this)
         trace.mark("MinecraftActivity onCreate finished")
+    }
+
+    private fun applyPerformanceMode() {
+        try {
+            if (!FeatureSettings.getInstance().isPerformanceModeEnabled) return
+            try {
+                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY)
+            } catch (_: Throwable) {}
+
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                @Suppress("DEPRECATION")
+                val disp = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) display else windowManager.defaultDisplay
+                val modes = disp?.supportedModes
+                if (!modes.isNullOrEmpty()) {
+                    var bestMode = modes[0]
+                    for (mode in modes) {
+                        if (mode.refreshRate > bestMode.refreshRate) {
+                            bestMode = mode
+                        }
+                    }
+                    val params = window.attributes
+                    params.preferredDisplayModeId = bestMode.modeId
+                    window.attributes = params
+                }
+            }
+        } catch (_: Throwable) {
+        }
     }
 
 

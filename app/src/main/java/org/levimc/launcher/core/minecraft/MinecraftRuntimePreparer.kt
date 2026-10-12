@@ -47,6 +47,9 @@ object MinecraftRuntimePreparer {
         launchIntent: Intent,
         listener: ProgressListener = noopListener
     ): PreparedRuntime {
+        try {
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_FOREGROUND)
+        } catch (_: Throwable) {}
         val trace = LaunchTrace.ensure(launchIntent)
         trace.milestone("Runtime preparation started")
         listener.onProgress(4, "Checking selected version")

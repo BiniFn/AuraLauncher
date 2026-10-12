@@ -10,6 +10,7 @@ public class FeatureSettings {
     private boolean logcatOverlayEnabled = false;
     private boolean foregroundServiceEnabled = false;
     private Boolean crashUploadEnabled = true;
+    private Boolean performanceModeEnabled = true;
 
     public enum StorageType {
         INTERNAL,
@@ -20,7 +21,9 @@ public class FeatureSettings {
     }
 
     public static void init(Context context) {
-        appContext = context.getApplicationContext();
+        if (context != null) {
+            appContext = context.getApplicationContext();
+        }
     }
 
     public static FeatureSettings getInstance() {
@@ -52,6 +55,8 @@ public class FeatureSettings {
     public boolean isCrashUploadEnabled() { return crashUploadEnabled == null || crashUploadEnabled; }
     public void setCrashUploadEnabled(boolean enabled) { this.crashUploadEnabled = enabled; autoSave(); }
 
+    public boolean isPerformanceModeEnabled() { return performanceModeEnabled == null || performanceModeEnabled; }
+    public void setPerformanceModeEnabled(boolean enabled) { this.performanceModeEnabled = enabled; autoSave(); }
 
     private void autoSave() {
         if (appContext != null) {

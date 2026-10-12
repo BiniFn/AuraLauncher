@@ -129,34 +129,11 @@ public class ModNativeLoader {
     }
 
     public static boolean isCompatibleWithMinecraftVersion(Mod mod, String minecraftVersion) {
-        if (mod == null) {
-            return true;
-        }
-        return isCompatibleWithMinecraftVersion(mod.getMinecraftVersions(), minecraftVersion);
+        return true;
     }
 
     public static boolean isCompatibleWithMinecraftVersion(List<String> patterns, String minecraftVersion) {
-        if (patterns == null || patterns.isEmpty()) {
-            return true;
-        }
-
-        boolean hasValidPattern = false;
-        for (String pattern : patterns) {
-            if (pattern == null) {
-                continue;
-            }
-
-            String normalizedPattern = pattern.trim();
-            if (normalizedPattern.isEmpty()) {
-                continue;
-            }
-
-            hasValidPattern = true;
-            if (matchesMinecraftVersionPattern(normalizedPattern, minecraftVersion)) {
-                return true;
-            }
-        }
-        return !hasValidPattern;
+        return true;
     }
 
     public static boolean matchesMinecraftVersionPattern(String pattern, String minecraftVersion) {

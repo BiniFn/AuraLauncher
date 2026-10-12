@@ -112,8 +112,10 @@ android {
 
     }
     packagingOptions {
+        jniLibs {
+            keepDebugSymbols += ['**/*.so']
+        }
         jniLibs.useLegacyPackaging = true
-        doNotStrip "**/*.so"
         resources.excludes += [
                 "DebugProbesKt.bin"
         ]

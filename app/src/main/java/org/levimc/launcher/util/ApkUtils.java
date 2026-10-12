@@ -26,11 +26,8 @@ public class ApkUtils {
             PackageManager pm = context.getPackageManager();
             PackageInfo info = pm.getPackageArchiveInfo(uri.getPath(), 0);
             if (info != null) {
-                String packageName = info.packageName;
-                String versionName = info.versionName;
-                if ("com.mojang.minecraftpe".equals(packageName) && versionName != null && !versionName.isEmpty()) {
-                    return "Minecraft_" + versionName;
-                }
+                String versionName = info.versionName != null ? info.versionName : "1.0";
+                return "Minecraft_" + versionName;
             }
             return "Error Apk";
         }
@@ -41,7 +38,7 @@ public class ApkUtils {
 
             tempFile = new File(context.getCacheDir(), "temp_apk_" + System.currentTimeMillis() + ".apk");
             try (OutputStream os = new FileOutputStream(tempFile)) {
-                byte[] buffer = new byte[131072];
+                byte[] buffer = new byte[262144];
                 int len;
                 while ((len = is.read(buffer)) != -1) {
                     os.write(buffer, 0, len);
@@ -50,12 +47,8 @@ public class ApkUtils {
             PackageManager pm = context.getPackageManager();
             PackageInfo info = pm.getPackageArchiveInfo(tempFile.getAbsolutePath(), 0);
             if (info != null) {
-                String packageName = info.packageName;
-                String versionName = info.versionName;
-
-                if ("com.mojang.minecraftpe".equals(packageName) && versionName != null && !versionName.isEmpty()) {
-                    return "Minecraft_" + versionName;
-                }
+                String versionName = info.versionName != null ? info.versionName : "1.0";
+                return "Minecraft_" + versionName;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +70,7 @@ public class ApkUtils {
                     if (!entry.isDirectory() && (entry.getName().equals("base.apk") || entry.getName().endsWith("/base.apk"))) {
                         tempApkFile = new File(context.getCacheDir(), "temp_base_" + System.currentTimeMillis() + ".apk");
                         try (OutputStream os = new FileOutputStream(tempApkFile)) {
-                            byte[] buffer = new byte[131072];
+                            byte[] buffer = new byte[262144];
                             int len;
                             while ((len = zis.read(buffer)) != -1) {
                                 os.write(buffer, 0, len);
@@ -87,11 +80,8 @@ public class ApkUtils {
                         PackageManager pm = context.getPackageManager();
                         PackageInfo info = pm.getPackageArchiveInfo(tempApkFile.getAbsolutePath(), 0);
                         if (info != null) {
-                            String packageName = info.packageName;
-                            String versionName = info.versionName;
-                            if ("com.mojang.minecraftpe".equals(packageName) && versionName != null && !versionName.isEmpty()) {
-                                return "Minecraft_" + versionName;
-                            }
+                            String versionName = info.versionName != null ? info.versionName : "1.0";
+                            return "Minecraft_" + versionName;
                         }
                         break;
                     }

@@ -8,12 +8,17 @@ android {
 
     defaultConfig {
         minSdkVersion 28
-        targetSdkVersion 35
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
+    }
+    lint {
+        targetSdk 35
+    }
+    testOptions {
+        targetSdk 35
     }
 }
 
